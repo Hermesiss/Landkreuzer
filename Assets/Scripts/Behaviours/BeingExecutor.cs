@@ -5,7 +5,7 @@ namespace Landkreuzer.Behaviours {
 	public class BeingExecutor : MonoBehaviour, IBeing {
 		[SerializeField] private BeingParameters beingParameters;
 
-		public BeingParameters GetBeingParameters => beingParameters;
+		public BeingParameters BeingParameters => beingParameters;
 		
 		public int Health { get; private set; }
 

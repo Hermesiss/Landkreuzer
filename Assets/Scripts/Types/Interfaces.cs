@@ -1,6 +1,6 @@
 namespace Landkreuzer.Types {
 	public interface IBeing {
-		BeingParameters GetBeingParameters { get; }
+		BeingParameters BeingParameters { get; }
 		
 		
 		int Health { get; }

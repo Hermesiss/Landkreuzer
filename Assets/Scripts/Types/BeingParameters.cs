@@ -9,5 +9,10 @@ namespace Landkreuzer.Types {
 		public int defence;
 		public int speed;
 		public int baseDmg;
+
+		/// <summary>
+		/// Angles per second
+		/// </summary>
+		public int rotationSpeed = 90;
 	}
 }
