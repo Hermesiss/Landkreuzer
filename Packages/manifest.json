@@ -1,9 +1,13 @@
 {
   "dependencies": {
+    "com.unity.inputsystem": "0.9.6-preview",
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.render-pipelines.lightweight": "5.7.2",
+    "com.unity.shadergraph": "5.7.2",
     "com.unity.textmeshpro": "2.0.1",
     "com.unity.timeline": "1.0.0",
+    "com.vladfaust.unitywakatime": "https://github.com/vladfaust/unity-wakatime.git#package",
+    "trismegistus.core": "https://github.com/TrismegistusDevelopment/unity-extras.git#upm",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -34,5 +38,15 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
+  },
+  "lock": {
+    "com.vladfaust.unitywakatime": {
+      "hash": "b8a1d9f726608a3517fade7d045c7c629a57c302",
+      "revision": "package"
+    },
+    "trismegistus.core": {
+      "hash": "ec3c7c0ec8f621fb3bb012b41b8461bc6bb86ee3",
+      "revision": "upm"
+    }
   }
 }
