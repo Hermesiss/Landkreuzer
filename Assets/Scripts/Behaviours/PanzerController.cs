@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using Landkreuzer.Types;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
 	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions {
@@ -14,6 +16,7 @@ namespace Landkreuzer.Behaviours {
 		private Rigidbody _rigidbody;
 		private int _selectedWeapon = 0;
 		private GameObject[] _instancedWeapons;
+		private readonly Stopwatch _stopwatch = new Stopwatch();
 
 		#region MonoBehaviourCallbacks
 
@@ -22,7 +25,7 @@ namespace Landkreuzer.Behaviours {
 			_input.Panzer.SetCallbacks(this);
 			_rigidbody = GetComponent<Rigidbody>();
 
-			InstanceWeapons();
+			InstantiateWeapons();
 			SelectWeapon(0);
 		}
 
@@ -42,8 +45,10 @@ namespace Landkreuzer.Behaviours {
 		#region InputSystemCallbacks
 
 		public void OnShoot(InputAction.CallbackContext context) {
-			if (context.started)
+			if (context.started) {
 				Debug.Log("Shoot");
+				Shoot();
+			}
 		}
 
 		public void OnMove(InputAction.CallbackContext context) {
@@ -80,7 +85,13 @@ namespace Landkreuzer.Behaviours {
 			}
 		}
 
-		private void InstanceWeapons() {
+		private void InstantiateWeapons() {
+			if (_instancedWeapons != null) {
+				foreach (var instancedWeapon in _instancedWeapons) {
+					Destroy(instancedWeapon);
+				}
+			}
+
 			_instancedWeapons = new GameObject[weapons.Length];
 			for (var i = 0; i < weapons.Length; i++) {
 				_instancedWeapons[i] = Instantiate(weapons[i].towerPrefab, Vector3.down * 100, Quaternion.identity);
@@ -97,6 +108,7 @@ namespace Landkreuzer.Behaviours {
 			current.transform.parent = transform;
 			current.transform.SetPositionAndRotation(weaponPlace.position, weaponPlace.rotation);
 			_selectedWeapon = index;
+			_stopwatch.Stop();
 		}
 
 		private void Move(float amount) {
@@ -105,6 +117,19 @@ namespace Landkreuzer.Behaviours {
 
 		private void Rotate(float signedAngle) {
 			_rigidbody.angularVelocity = BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
+		}
+
+		private void Shoot() {
+			var selected = weapons[_selectedWeapon];
+			if (_stopwatch.IsRunning && _stopwatch.ElapsedMilliseconds < selected.cooldown * 1000)
+				return;
+			var t = transform;
+			var projectile = Instantiate(selected.projectilePrefab, t.position + t.forward,
+				t.rotation);
+			var projectileController = projectile.AddComponent<ProjectileController>();
+			projectileController.SetParameters(new ProjectileParameters(selected.damage, selected.projectileSpeed));
+			projectileController.Fire();
+			_stopwatch.Restart();
 		}
 	}
 }

@@ -19,4 +19,13 @@ namespace Landkreuzer.Types {
 		/// <returns>Health after healing</returns>
 		int Heal(uint value);
 	}
+
+	public interface IProjectile<T> {
+		void Fire();
+		void SetParameters(T parameters);
+	}
+
+	public interface IDamaging {
+		int Damage { get; }
+	}
 }

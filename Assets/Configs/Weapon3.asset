@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 4095804268744917927, guid: feefba6ae6f281f44a5b35c26da9afa0,
     type: 3}
-  projectilePrefab: {fileID: 5540067385302992578, guid: a9349ca13e5c216448bc8992e1da274a,
+  projectilePrefab: {fileID: 5540067385302992578, guid: 99c1cf7c546022b4389b708a32647337,
     type: 3}
   damage: 300
-  cooldown: 1
+  cooldown: 0.9
   projectileSpeed: 1
