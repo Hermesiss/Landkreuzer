@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9b88db743c439ea9663eeb16b0290e, type: 3}
+  m_Name: Weapon3
+  m_EditorClassIdentifier: 
+  towerPrefab: {fileID: 4095804268744917927, guid: feefba6ae6f281f44a5b35c26da9afa0,
+    type: 3}
+  projectilePrefab: {fileID: 5540067385302992578, guid: a9349ca13e5c216448bc8992e1da274a,
+    type: 3}
+  damage: 300
+  cooldown: 1
+  projectileSpeed: 1
