@@ -1,0 +1,17 @@
+{
+    "name": "Landkreuzer.Editor",
+    "references": [
+        "GUID:749c9ce44966f014ea57ad5cbb767f68"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
