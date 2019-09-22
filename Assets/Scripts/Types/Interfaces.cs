@@ -1,6 +1,9 @@
+using UnityEngine;
+using UnityEngine.Events;
+
 namespace Landkreuzer.Types {
 	public interface IBeing {
-		BeingParameters BeingParameters { get; }
+		BeingParameters BeingParameters { get; set; }
 		
 		
 		int Health { get; }
@@ -18,6 +21,8 @@ namespace Landkreuzer.Types {
 		/// <param name="value">Pure heal points before applying modificators</param>
 		/// <returns>Health after healing</returns>
 		int Heal(uint value);
+		
+		UnityEvent OnDead { get; }
 	}
 
 	public interface IProjectile<T> {

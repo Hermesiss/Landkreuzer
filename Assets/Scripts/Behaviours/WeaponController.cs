@@ -3,7 +3,7 @@ using Landkreuzer.Types;
 using UnityEngine;
 
 namespace Landkreuzer.Behaviours {
-	public class WeaponController : MonoBehaviour{
+	public class WeaponController : MonoBehaviour {
 		public WeaponParameters Parameters { get; private set; }
 	
 		private readonly Stopwatch _stopwatch = new Stopwatch();
@@ -26,6 +26,5 @@ namespace Landkreuzer.Behaviours {
 			projectileController.Fire();
 			_stopwatch.Restart();
 		}
-		
 	}
 }

@@ -5,14 +5,14 @@ using UnityEngine;
 namespace Landkreuzer.Types {
 	[CreateAssetMenu(fileName = "New BeingParameters", menuName = "Trismegistus/BeingParameters")]
 	public class BeingParameters : ScriptableObject {
-		public int health;
-		public int defence;
-		public int speed;
-		public int baseDmg;
+		public float health;
+		public float defence;
+		public float speed;
+		public float baseDmg;
 
 		/// <summary>
 		/// Angles per second
 		/// </summary>
-		public int rotationSpeed = 90;
+		public float rotationSpeed = 90;
 	}
 }

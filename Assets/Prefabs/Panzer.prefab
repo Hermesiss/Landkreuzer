@@ -164,7 +164,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5274166707812164579}
   - component: {fileID: 4207932119262430631}
-  - component: {fileID: 196200204868631108}
   - component: {fileID: 3610388552581588004}
   - component: {fileID: 1516629480}
   m_Layer: 9
@@ -202,25 +201,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b7522d2f9c4437936efef11307de7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  executor: {fileID: 196200204868631108}
+  executor:
+    beingParameters: {fileID: 11400000, guid: 6f65d06b476db354db039ebfa1d8e43b, type: 2}
   weaponPlace: {fileID: 804466216699062260}
   weapons:
   - {fileID: 11400000, guid: 557c34250aacc73439b385eee9d398d2, type: 2}
   - {fileID: 11400000, guid: 0659e676a9a539d4c88573e8943e8ffb, type: 2}
   - {fileID: 11400000, guid: f68432d2babce1343bccf2d8d67d4b09, type: 2}
---- !u!114 &196200204868631108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8472354053778373005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5de7848e70a0469c9eabcecd60f07aaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  beingParameters: {fileID: 11400000, guid: 6f65d06b476db354db039ebfa1d8e43b, type: 2}
 --- !u!65 &3610388552581588004
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -232,7 +219,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.22, y: 0.53, z: 1}
+  m_Size: {x: 0.59, y: 0.53, z: 0.65}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1516629480
 Rigidbody:

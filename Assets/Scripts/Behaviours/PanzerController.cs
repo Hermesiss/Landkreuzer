@@ -7,6 +7,8 @@ using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
 	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions {
+		public static Vector3 Position { get; private set; }
+
 		[SerializeField] private Transform weaponPlace;
 		[SerializeField] private WeaponParameters[] weapons;
 
@@ -19,7 +21,8 @@ namespace Landkreuzer.Behaviours {
 
 		#region MonoBehaviourCallbacks
 
-		private void Awake() {
+		private new void Awake() {
+			base.Awake();
 			_input = new Input();
 			_input.Panzer.SetCallbacks(this);
 			_rigidbody = GetComponent<Rigidbody>();
@@ -33,6 +36,7 @@ namespace Landkreuzer.Behaviours {
 			LegacyMovementDetection();
 			Rotate(_currentMovement.x);
 			Move(_currentMovement.y);
+			Position = transform.position;
 		}
 
 		private void OnEnable() => _input.Panzer.Enable();
