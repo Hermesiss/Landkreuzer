@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Landkreuzer.Behaviours {
 	public class ProjectileParameters {
-		public readonly int Damage;
+		public readonly float Damage;
 		public readonly float Speed;
-		public ProjectileParameters(int damage, float speed) {
+		public ProjectileParameters(float damage, float speed) {
 			Damage = damage;
 			Speed = speed;
 		}
 	}
 	public class ProjectileController : MonoBehaviour, IProjectile<ProjectileParameters>, IDamaging {
-		public int Damage => _parameters.Damage;
+		public float Damage => _parameters.Damage;
 
 		private ProjectileParameters _parameters;
 
@@ -31,6 +31,7 @@ namespace Landkreuzer.Behaviours {
 
 		public void Fire() {
 			StartCoroutine(Movement(_parameters.Speed));
+			Statistics.StatisticsEvent(StatisticType.Shot, 1);
 		}
 
 		public void SetParameters(ProjectileParameters parameters) {
@@ -44,6 +45,4 @@ namespace Landkreuzer.Behaviours {
 			}
 		}
 	}
-
-	
 }

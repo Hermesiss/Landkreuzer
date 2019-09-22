@@ -1,9 +1,7 @@
-using System;
 using System.Diagnostics;
 using Landkreuzer.Types;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
 	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions {
@@ -18,6 +16,8 @@ namespace Landkreuzer.Behaviours {
 		private Rigidbody _rigidbody;
 		private int _selectedWeapon = 0;
 		private WeaponController[] _instancedWeapons;
+		private bool _controlsEnabled;
+		private Stopwatch _gameStopwatch = new Stopwatch();
 
 		#region MonoBehaviourCallbacks
 
@@ -30,8 +30,10 @@ namespace Landkreuzer.Behaviours {
 
 			InstantiateWeapons();
 			SelectWeapon(0);
+			_gameStopwatch.Start();
+			Overseer.GameStart();
 		}
-
+		
 		private void Update() {
 			InputSystem.Update();
 			LegacyMovementDetection();
@@ -40,9 +42,9 @@ namespace Landkreuzer.Behaviours {
 			Position = transform.position;
 		}
 
-		private void OnEnable() => _input.Panzer.Enable();
+		private void OnEnable() => ControlsState(true);
 
-		private void OnDisable() => _input.Panzer.Disable();
+		private void OnDisable() => ControlsState(false);
 
 		private void OnGUI() {
 			var main = Camera.main;
@@ -81,6 +83,7 @@ namespace Landkreuzer.Behaviours {
 		/// bug https://issuetracker.unity3d.com/issues/callbackcontext-is-not-called-when-two-buttons-are-pressed-or-released
 		/// </summary>
 		private void LegacyMovementDetection() {
+			if (!_controlsEnabled) return;
 			var up = Pressed(KeyCode.UpArrow) || Pressed(KeyCode.W) ? 1 : 0;
 			var down = Pressed(KeyCode.DownArrow) || Pressed(KeyCode.S) ? 1 : 0;
 			var right = Pressed(KeyCode.RightArrow) || Pressed(KeyCode.D) ? 1 : 0;
@@ -125,5 +128,19 @@ namespace Landkreuzer.Behaviours {
 			BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
 
 		private void Shoot() => _instancedWeapons[_selectedWeapon].Shoot();
+
+		private void ControlsState(bool mode) {
+			_controlsEnabled = mode;
+			if (mode) _input.Panzer.Enable();
+			else _input.Panzer.Disable();
+		}
+		
+		
+		protected override void Death() {
+			ControlsState(false);
+			Statistics.StatisticsEvent(StatisticType.Time, _gameStopwatch.ElapsedMilliseconds/1000f);
+			_gameStopwatch.Stop();
+			Overseer.GameOver();
+		}
 	}
 }

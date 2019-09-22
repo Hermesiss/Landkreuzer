@@ -20,10 +20,10 @@ namespace Landkreuzer.Behaviours {
 		private protected override void Awake() {
 			base.Awake();
 			_navMeshAgent = GetComponent<NavMeshAgent>();
-			OnDead.AddListener(Death);
 		}
 
-		private void Death(BeingControllerAbstract arg0) {
+		protected override void Death() {
+			Statistics.StatisticsEvent(StatisticType.Death, 1);
 			Debug.Log("Death");
 			Destroy(gameObject);
 		}
@@ -31,7 +31,10 @@ namespace Landkreuzer.Behaviours {
 		private void OnTriggerEnter(Collider other) {
 			var projectileController = other.GetComponent<ProjectileController>();
 			if (projectileController) {
-				executor.Hurt((uint) projectileController.Damage);
+				var dmg = projectileController.Damage;
+				Statistics.StatisticsEvent(StatisticType.Damage, dmg);
+				Statistics.StatisticsEvent(StatisticType.Hit, 1);
+				executor.Hurt((uint) dmg);
 			}
 		}
 

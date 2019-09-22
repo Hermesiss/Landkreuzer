@@ -10,9 +10,15 @@ namespace Landkreuzer.Behaviours {
 	public abstract class BeingControllerAbstract : MonoBehaviour {
 		public BeingExecutor executor = new BeingExecutor();
 		public BeingEvent OnDead { get; } = new BeingEvent();
+		private bool _isAlive = true;
 
 		private protected virtual void Awake() {
-			executor.OnDead.AddListener(() => OnDead.Invoke(this));
+			executor.OnDead.AddListener(() => {
+				if (!_isAlive) return;
+				_isAlive = false;
+				OnDead.Invoke(this);
+				Death();
+			});
 		}
 
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
@@ -31,5 +37,7 @@ namespace Landkreuzer.Behaviours {
 			rect.width *= being.executor.Health / being.executor.BeingParameters.health;
 			GUI.Box(rect, "", GUI.skin.textField);
 		}
+
+		protected abstract void Death();
 	}
 }

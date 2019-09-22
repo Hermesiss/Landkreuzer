@@ -30,6 +30,6 @@ namespace Landkreuzer.Types {
 	}
 
 	public interface IDamaging {
-		int Damage { get; }
+		float Damage { get; }
 	}
 }
