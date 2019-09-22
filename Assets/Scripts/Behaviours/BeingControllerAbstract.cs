@@ -9,13 +9,12 @@ namespace Landkreuzer.Behaviours {
 	}
 	public abstract class BeingControllerAbstract : MonoBehaviour {
 		public BeingExecutor executor = new BeingExecutor();
-		public BeingEvent OnDead { get; private set; } = new BeingEvent();
+		public BeingEvent OnDead { get; } = new BeingEvent();
 
-		private protected void Awake() {
+		private protected virtual void Awake() {
 			executor.OnDead.AddListener(() => OnDead.Invoke(this));
 		}
 
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
-
 	}
 }

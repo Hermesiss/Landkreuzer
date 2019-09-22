@@ -49,7 +49,6 @@ namespace Landkreuzer.Behaviours {
 
 		public void OnShoot(InputAction.CallbackContext context) {
 			if (context.started) {
-				Debug.Log("Shoot");
 				Shoot();
 			}
 		}
@@ -61,9 +60,7 @@ namespace Landkreuzer.Behaviours {
 
 		public void OnChangeWeapon(InputAction.CallbackContext context) {
 			if (context.started) {
-				var value = context.ReadValue<float>();
-				SelectWeapon(_selectedWeapon + (int) Mathf.Sign(value));
-				Debug.Log($"Change weapon:{value}");
+				SelectWeapon(_selectedWeapon + (int) Mathf.Sign(context.ReadValue<float>()));
 			}
 		}
 

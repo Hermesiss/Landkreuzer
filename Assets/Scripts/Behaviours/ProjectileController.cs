@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Landkreuzer.Types;
 using UnityEngine;
@@ -15,6 +16,15 @@ namespace Landkreuzer.Behaviours {
 		public int Damage => _parameters.Damage;
 
 		private ProjectileParameters _parameters;
+
+		private void Awake() {
+			GetComponent<Collider>().isTrigger = true;
+		}
+
+		private void OnTriggerEnter(Collider other) {
+			Destroy(gameObject);
+		}
+
 		public void Fire() {
 			StartCoroutine(Movement(_parameters.Speed));
 		}
