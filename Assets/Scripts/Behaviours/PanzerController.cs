@@ -15,8 +15,7 @@ namespace Landkreuzer.Behaviours {
 		private BeingParameters BeingParams => executor.BeingParameters;
 		private Rigidbody _rigidbody;
 		private int _selectedWeapon = 0;
-		private GameObject[] _instancedWeapons;
-		private readonly Stopwatch _stopwatch = new Stopwatch();
+		private WeaponController[] _instancedWeapons;
 
 		#region MonoBehaviourCallbacks
 
@@ -92,9 +91,9 @@ namespace Landkreuzer.Behaviours {
 				}
 			}
 
-			_instancedWeapons = new GameObject[weapons.Length];
+			_instancedWeapons = new WeaponController[weapons.Length];
 			for (var i = 0; i < weapons.Length; i++) {
-				_instancedWeapons[i] = Instantiate(weapons[i].towerPrefab, Vector3.down * 100, Quaternion.identity);
+				_instancedWeapons[i] = WeaponController.Create(weapons[i], Vector3.down * 100, Quaternion.identity);
 			}
 		}
 
@@ -108,28 +107,14 @@ namespace Landkreuzer.Behaviours {
 			current.transform.parent = transform;
 			current.transform.SetPositionAndRotation(weaponPlace.position, weaponPlace.rotation);
 			_selectedWeapon = index;
-			_stopwatch.Stop();
 		}
 
-		private void Move(float amount) {
+		private void Move(float amount) =>
 			_rigidbody.velocity = BeingParams.speed * amount * Time.deltaTime * 60 * transform.forward;
-		}
 
-		private void Rotate(float signedAngle) {
-			_rigidbody.angularVelocity = BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
-		}
+		private void Rotate(float signedAngle) => _rigidbody.angularVelocity =
+			BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
 
-		private void Shoot() {
-			var selected = weapons[_selectedWeapon];
-			if (_stopwatch.IsRunning && _stopwatch.ElapsedMilliseconds < selected.cooldown * 1000)
-				return;
-			var t = transform;
-			var projectile = Instantiate(selected.projectilePrefab, t.position + t.forward,
-				t.rotation);
-			var projectileController = projectile.AddComponent<ProjectileController>();
-			projectileController.SetParameters(new ProjectileParameters(selected.damage, selected.projectileSpeed));
-			projectileController.Fire();
-			_stopwatch.Restart();
-		}
+		private void Shoot() => _instancedWeapons[_selectedWeapon].Shoot();
 	}
 }
