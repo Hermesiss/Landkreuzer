@@ -25,6 +25,10 @@ namespace Landkreuzer.Behaviours {
 			Destroy(gameObject);
 		}
 
+		private void OnCollisionEnter(Collision other) {
+			Destroy(gameObject);
+		}
+
 		public void Fire() {
 			StartCoroutine(Movement(_parameters.Speed));
 		}
