@@ -15,5 +15,5 @@ MonoBehaviour:
   health: 100
   defence: 10
   speed: 0.5
-  baseDmg: 0
+  baseDmg: 10
   rotationSpeed: 45

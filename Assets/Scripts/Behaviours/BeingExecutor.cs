@@ -12,8 +12,13 @@ namespace Landkreuzer.Behaviours {
 			get => beingParameters;
 			set {
 				beingParameters = value;
-				Health = beingParameters.health;
+				ApplyParameters();
 			}
+		}
+
+		internal void ApplyParameters() {
+			if (!beingParameters) return;
+			Health = beingParameters.health;
 		}
 
 		public float Health { get; private set; }
@@ -27,7 +32,6 @@ namespace Landkreuzer.Behaviours {
 			if (Health <= 0) {
 				Health = 0;
 				OnDead.Invoke();
-				return Health;
 			}
 			
 			Debug.Log($"Dmg {value}, def {beingParameters.defence}, health reduced from {prevHealth} to {Health}");
@@ -43,5 +47,10 @@ namespace Landkreuzer.Behaviours {
 		}
 
 		public UnityEvent OnDead { get; } = new UnityEvent();
+
+
+		public BeingExecutor() {
+			ApplyParameters();
+		}
 	}
 }

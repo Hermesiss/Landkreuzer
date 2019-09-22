@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 1516629480}
   m_Layer: 9
   m_Name: Panzer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -215,7 +215,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8472354053778373005}
-  m_Material: {fileID: 13400000, guid: d185e787c88f1ac47be17f4b3e48bafa, type: 2}
+  m_Material: {fileID: 13400000, guid: 14f4ab2a3c29b1841a095bb4fcf0d503, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2

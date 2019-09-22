@@ -1,12 +1,15 @@
 using System;
+using System.Diagnostics;
 using Landkreuzer.Types;
 using UnityEngine;
 using UnityEngine.AI;
+using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
 	[RequireComponent(typeof(NavMeshAgent))]
 	public class EnemyController : BeingControllerAbstract {
 		private NavMeshAgent _navMeshAgent;
+		private Stopwatch _stopwatch = new Stopwatch();
 
 		public override void SetParameters(BeingParameters parameters) {
 			base.SetParameters(parameters);
@@ -29,6 +32,21 @@ namespace Landkreuzer.Behaviours {
 			var projectileController = other.GetComponent<ProjectileController>();
 			if (projectileController) {
 				executor.Hurt((uint) projectileController.Damage);
+			}
+		}
+
+		private void OnTriggerStay(Collider other) {
+			if (other.tag.Equals("Player")) {
+				//Debug.Log();
+				if (!_stopwatch.IsRunning || (_stopwatch.ElapsedMilliseconds > 1000))
+				{
+					var player = other.GetComponent<PanzerController>();
+					if (player) {
+						Debug.Log($"Is running {_stopwatch.IsRunning}, elapsed {_stopwatch.ElapsedMilliseconds}");
+						player.executor.Hurt(executor.BeingParameters.baseDmg);
+						_stopwatch.Restart();
+					}
+				}
 			}
 		}
 

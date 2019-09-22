@@ -16,5 +16,20 @@ namespace Landkreuzer.Behaviours {
 		}
 
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
+
+		public void DisplayHealth(Camera cam, Rect viewportRect) {
+			var being = this;
+			var pos = cam.WorldToViewportPoint(being.transform.position + Vector3.up);
+			var rect = new Rect(0, 0, 100, 20);
+			rect.x = pos.x * viewportRect.width - rect.width / 2;
+			rect.y = viewportRect.height - pos.y * viewportRect.height - rect.height / 2;
+
+			GUI.Label(rect, $"{being.executor.Health}/{being.executor.BeingParameters.health}");
+			rect.y += rect.height;
+			rect.height = 6;
+			GUI.Box(rect, "", GUI.skin.box);
+			rect.width *= being.executor.Health / being.executor.BeingParameters.health;
+			GUI.Box(rect, "", GUI.skin.textField);
+		}
 	}
 }

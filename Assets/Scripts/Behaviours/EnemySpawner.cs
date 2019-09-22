@@ -82,26 +82,10 @@ namespace Landkreuzer.Behaviours {
 		private void OnGUI() {
 			var main = Camera.main;
 			if (main == null) return;
-
-			var style = new GUIStyle(GUI.skin.box) {
-				normal = {
-					background = new Texture2D(2, 2) {wrapMode = TextureWrapMode.Repeat}, textColor = Color.black
-				}
-			};
 			var viewportRect = main.pixelRect;
 
 			foreach (var enemyController in _enemies) {
-				var pos = main.WorldToViewportPoint(enemyController.transform.position + Vector3.up);
-				var rect = new Rect(0, 0, 100, 20);
-				rect.x = pos.x * viewportRect.width - rect.width / 2;
-				rect.y = viewportRect.height - pos.y * viewportRect.height - rect.height / 2;
-
-				GUI.Box(rect, $"{enemyController.executor.Health}/{enemyController.executor.BeingParameters.health}",
-					style);
-				rect.y += rect.height;
-				rect.height = 3;
-				rect.width *= enemyController.executor.Health / enemyController.executor.BeingParameters.health;
-				GUI.Box(rect,"", style);
+				enemyController.DisplayHealth(main, viewportRect);
 			}
 		}
 	}

@@ -26,6 +26,7 @@ namespace Landkreuzer.Behaviours {
 			_input = new Input();
 			_input.Panzer.SetCallbacks(this);
 			_rigidbody = GetComponent<Rigidbody>();
+			executor.ApplyParameters();
 
 			InstantiateWeapons();
 			SelectWeapon(0);
@@ -42,6 +43,13 @@ namespace Landkreuzer.Behaviours {
 		private void OnEnable() => _input.Panzer.Enable();
 
 		private void OnDisable() => _input.Panzer.Disable();
+
+		private void OnGUI() {
+			var main = Camera.main;
+			if (main == null) return;
+			var viewportRect = main.pixelRect;
+			DisplayHealth(main, viewportRect);
+		}
 
 		#endregion
 

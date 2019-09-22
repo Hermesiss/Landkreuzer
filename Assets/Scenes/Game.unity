@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 1
-  maxEnemies: 10
+  maxEnemies: 1
   enemyPrefab: {fileID: 3977827686613426567, guid: cc0b108ff8fddef4c887f828aa890cf8,
     type: 3}
   enemiesPool:
@@ -1181,11 +1181,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3610388552581588004, guid: 779c148feeba6dd4ba052a20159f674d,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 14f4ab2a3c29b1841a095bb4fcf0d503,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 779c148feeba6dd4ba052a20159f674d, type: 3}
