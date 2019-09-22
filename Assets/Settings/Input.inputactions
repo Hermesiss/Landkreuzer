@@ -87,7 +87,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "2D Vector",
+                    "name": "Arrows",
                     "id": "023fde65-a760-4a5f-aff6-0555119ffc8d",
                     "path": "2DVector(normalize=false)",
                     "interactions": "",
@@ -142,7 +142,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "2D Vector",
+                    "name": "WASD",
                     "id": "3b20860b-698b-4d28-bedf-d5ca5dab3c10",
                     "path": "2DVector",
                     "interactions": "",

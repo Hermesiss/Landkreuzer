@@ -101,7 +101,7 @@ namespace Landkreuzer
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""Arrows"",
                     ""id"": ""023fde65-a760-4a5f-aff6-0555119ffc8d"",
                     ""path"": ""2DVector(normalize=false)"",
                     ""interactions"": """",
@@ -156,7 +156,7 @@ namespace Landkreuzer
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""WASD"",
                     ""id"": ""3b20860b-698b-4d28-bedf-d5ca5dab3c10"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -216,10 +216,10 @@ namespace Landkreuzer
     ""controlSchemes"": []
 }");
             // Panzer
-            m_Panzer = asset.GetActionMap("Panzer");
-            m_Panzer_Shoot = m_Panzer.GetAction("Shoot");
-            m_Panzer_Move = m_Panzer.GetAction("Move");
-            m_Panzer_ChangeWeapon = m_Panzer.GetAction("ChangeWeapon");
+            m_Panzer = asset.FindActionMap("Panzer", throwIfNotFound: true);
+            m_Panzer_Shoot = m_Panzer.FindAction("Shoot", throwIfNotFound: true);
+            m_Panzer_Move = m_Panzer.FindAction("Move", throwIfNotFound: true);
+            m_Panzer_ChangeWeapon = m_Panzer.FindAction("ChangeWeapon", throwIfNotFound: true);
         }
 
         ~Input()

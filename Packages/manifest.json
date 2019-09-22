@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.inputsystem": "0.9.6-preview",
+    "com.unity.inputsystem": "1.0.0-preview",
     "com.unity.package-manager-ui": "2.1.2",
     "com.unity.render-pipelines.lightweight": "5.7.2",
     "com.unity.shadergraph": "5.7.2",
