@@ -11,6 +11,7 @@ namespace Landkreuzer.Behaviours {
 		public BeingExecutor executor = new BeingExecutor();
 		public BeingEvent OnDead { get; } = new BeingEvent();
 		private bool _isAlive = true;
+		private bool _displayOverlay = true;
 
 		private protected virtual void Awake() {
 			executor.OnDead.AddListener(() => {
@@ -19,12 +20,13 @@ namespace Landkreuzer.Behaviours {
 				OnDead.Invoke(this);
 				Death();
 			});
+			Overseer.OnGameOver.AddListener(() => _displayOverlay = false);
 		}
 
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
 
 		public void DisplayHealth(Camera cam, Rect viewportRect) {
-			if (!_isAlive) return;
+			if (!_displayOverlay) return;
 			var being = this;
 			var pos = cam.WorldToViewportPoint(being.transform.position + Vector3.up);
 			var rect = new Rect(0, 0, 100, 20);

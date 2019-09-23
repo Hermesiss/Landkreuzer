@@ -1,19 +1,29 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Landkreuzer.Behaviours.UI {
 	[RequireComponent(typeof(Canvas))]
-	public class UiController : MonoBehaviour {
+	public abstract class UiControllerAbstract : MonoBehaviour{
+		[SerializeField] private protected Button exitBtn;
+	}
+
+
+	public class UiController : UiControllerAbstract {
 		[SerializeField] private RectTransform scoreRoot;
 		[SerializeField] private ScoreView scoreViewPrefab;
+		[SerializeField] private Button restartBtn, menuBtn;
 
 		private Canvas _canvas;
 
 		private void Awake() {
-			var stats = Statistics.Stats;
 			_canvas = GetComponent<Canvas>();
 			_canvas.enabled = false;
 			Overseer.OnGameOver.AddListener(DisplayScores);
+			restartBtn.onClick.AddListener(() => { SceneManager.LoadScene(SceneManager.GetActiveScene().name);});
+			menuBtn.onClick.AddListener(() => { SceneManager.LoadScene(0);});
+			exitBtn.onClick.AddListener(() => { SceneManager.LoadScene(0);});
 		}
 
 		private void DisplayScores() {
