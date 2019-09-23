@@ -7,6 +7,8 @@ namespace Landkreuzer {
 	public static class Overseer {
 		public static UnityEvent OnGameOver { get; } = new UnityEvent();
 		public static UnityEvent OnGameStart { get; } = new UnityEvent();
+		
+		public static UnityVec3Event OnPlayerMove { get; } = new UnityVec3Event();
 
 		public static UnityEvent OnEnemyHit { get; } = new UnityEvent();
 
@@ -17,9 +19,10 @@ namespace Landkreuzer {
 
 		public static UnityEvent OnShot { get; } = new UnityEvent();
 
-		public static void RegisterGameChanger(IPlayer player) {
+		public static void RegisterPlayer(IPlayer player) {
 			player.OnPlayerBorn.AddListener(OnGameStart.Invoke);
 			player.OnPlayerDied.AddListener(OnGameOver.Invoke);
+			player.OnPlayerMove.AddListener(OnPlayerMove.Invoke);
 		}
 
 		public static void RegisterEnemy(IEnemy enemy) {

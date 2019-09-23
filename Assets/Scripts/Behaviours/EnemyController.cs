@@ -20,6 +20,7 @@ namespace Landkreuzer.Behaviours {
 	public class EnemyController : BeingControllerAbstract, IEnemy {
 		private NavMeshAgent _navMeshAgent;
 		private Stopwatch _stopwatch = new Stopwatch();
+		private Vector3 _playerPosition;
 
 		public UnityFloatEvent OnDamageReceived { get; } = new UnityFloatEvent();
 		public UnityEvent OnHit { get; } = new UnityEvent();
@@ -34,8 +35,10 @@ namespace Landkreuzer.Behaviours {
 
 		private protected override void Awake() {
 			base.Awake();
+			
 			_navMeshAgent = GetComponent<NavMeshAgent>();
 			Overseer.RegisterEnemy(this);
+			Overseer.OnPlayerMove.AddListener(pos => { _playerPosition = pos; });
 			OnSpawn.Invoke(this);
 		}
 
@@ -71,7 +74,7 @@ namespace Landkreuzer.Behaviours {
 
 
 		private void Update() {
-			_navMeshAgent.SetDestination(PanzerController.Position);
+			_navMeshAgent.SetDestination(_playerPosition);
 			var t = transform;
 			if (Mathf.Pow(_navMeshAgent.stoppingDistance, 2) < (_navMeshAgent.destination - t.position).sqrMagnitude) {
 				t.Rotate(Vector3.up,

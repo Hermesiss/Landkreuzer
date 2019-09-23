@@ -35,7 +35,9 @@ namespace Landkreuzer.Behaviours.UI {
 			score.Caption = caption;
 			var valueA = Convert.ToSingle(Statistics.Stats[typeA].Value.ToString());
 			var valueB = Convert.ToSingle(Statistics.Stats[typeB].Value.ToString());
-			score.Value = (valueA/valueB).ToString("P1");
+			var result = Math.Abs(valueB) < float.Epsilon ? 0 : valueA / valueB;
+			
+			score.Value = result.ToString("P1");
 		}
 	}
 }

@@ -24,6 +24,7 @@ namespace Landkreuzer.Behaviours {
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
 
 		public void DisplayHealth(Camera cam, Rect viewportRect) {
+			if (!_isAlive) return;
 			var being = this;
 			var pos = cam.WorldToViewportPoint(being.transform.position + Vector3.up);
 			var rect = new Rect(0, 0, 100, 20);

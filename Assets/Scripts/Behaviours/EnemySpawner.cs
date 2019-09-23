@@ -19,9 +19,11 @@ namespace Landkreuzer.Behaviours {
 		private List<EnemyController> _enemies = new List<EnemyController>();
 		private Stopwatch _stopwatch;
 		private Coroutine _spawnCoroutine;
+		private Vector3 _playerPosition;
 
 		private void Awake() {
 			_spawnCoroutine = StartCoroutine(SpawnInstructions());
+			Overseer.OnPlayerMove.AddListener(pos => { _playerPosition = pos; });
 		}
 
 		public void SetSpawningState(bool mode) {
@@ -64,7 +66,7 @@ namespace Landkreuzer.Behaviours {
 		}
 
 		private Quaternion GetSpawnRotation(Vector3 pos) {
-			return Quaternion.LookRotation(PanzerController.Position - pos, Vector3.up);
+			return Quaternion.LookRotation(_playerPosition - pos, Vector3.up);
 		}
 
 		private Vector3 GetSpawnPosition() => GetPointOnPerimeter(perimeter.bounds);

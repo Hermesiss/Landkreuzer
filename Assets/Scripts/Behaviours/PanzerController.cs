@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Landkreuzer.Types;
+using Trismegistus.Core.Types;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -9,12 +10,14 @@ namespace Landkreuzer.Behaviours {
 	public interface IPlayer {
 		UnityEvent OnPlayerBorn { get; }
 		UnityEvent OnPlayerDied { get; }
+		
+		UnityVec3Event OnPlayerMove { get; }
 	}
 	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions, IPlayer {
-		public static Vector3 Position { get; private set; }
 		
 		public UnityEvent OnPlayerBorn { get; } = new UnityEvent();
 		public UnityEvent OnPlayerDied { get; } = new UnityEvent();
+		public UnityVec3Event OnPlayerMove { get; } = new UnityVec3Event();
 
 		[SerializeField] private Transform weaponPlace;
 		[SerializeField] private WeaponParameters[] weapons;
@@ -27,8 +30,6 @@ namespace Landkreuzer.Behaviours {
 		private WeaponController[] _instancedWeapons;
 		private bool _controlsEnabled;
 		private Stopwatch _gameStopwatch = new Stopwatch();
-		
-		
 
 		#region MonoBehaviourCallbacks
 
@@ -42,7 +43,7 @@ namespace Landkreuzer.Behaviours {
 			InstantiateWeapons();
 			SelectWeapon(0);
 			_gameStopwatch.Start();
-			Overseer.RegisterGameChanger(this);
+			Overseer.RegisterPlayer(this);
 			
 		}
 
@@ -55,7 +56,6 @@ namespace Landkreuzer.Behaviours {
 			LegacyMovementDetection();
 			Rotate(_currentMovement.x);
 			Move(_currentMovement.y);
-			Position = transform.position;
 		}
 
 		private void OnEnable() => ControlsState(true);
@@ -137,8 +137,11 @@ namespace Landkreuzer.Behaviours {
 			_selectedWeapon = index;
 		}
 
-		private void Move(float amount) =>
+		private void Move(float amount) {
 			_rigidbody.velocity = BeingParams.speed * amount * Time.deltaTime * 60 * transform.forward;
+			OnPlayerMove.Invoke(transform.position);
+		}
+
 
 		private void Rotate(float signedAngle) => _rigidbody.angularVelocity =
 			BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
