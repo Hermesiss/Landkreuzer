@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 namespace Landkreuzer.Behaviours {
-	public class BeingEvent : UnityEvent<BeingControllerAbstract> {
-		
-	}
+	public class BeingEvent : UnityEvent<BeingControllerAbstract> { }
+
 	public abstract class BeingControllerAbstract : MonoBehaviour {
 		public BeingExecutor executor = new BeingExecutor();
 		public BeingEvent OnDead { get; } = new BeingEvent();
@@ -25,6 +24,11 @@ namespace Landkreuzer.Behaviours {
 
 		public virtual void SetParameters(BeingParameters parameters) => executor.BeingParameters = parameters;
 
+		/// <summary>
+		/// Call this inside OnGUI method
+		/// </summary>
+		/// <param name="cam">Usually <see cref="Camera.main"/></param>
+		/// <param name="viewportRect">Usually <see cref="Camera.main.pixelRect"/></param>
 		public void DisplayHealth(Camera cam, Rect viewportRect) {
 			if (!_displayOverlay) return;
 			var being = this;
@@ -33,11 +37,16 @@ namespace Landkreuzer.Behaviours {
 			rect.x = pos.x * viewportRect.width - rect.width / 2;
 			rect.y = viewportRect.height - pos.y * viewportRect.height - rect.height / 2;
 
+			//Current health / Full health
 			GUI.Label(rect, $"{being.executor.Health}/{being.executor.BeingParameters.health}");
 			rect.y += rect.height;
 			rect.height = 6;
+			
+			//Full health background rectangle
 			GUI.Box(rect, "", GUI.skin.box);
 			rect.width *= being.executor.Health / being.executor.BeingParameters.health;
+			
+			//Current health foreground rectangle
 			GUI.Box(rect, "", GUI.skin.textField);
 		}
 

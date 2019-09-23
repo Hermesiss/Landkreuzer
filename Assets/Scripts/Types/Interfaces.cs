@@ -10,21 +10,21 @@ namespace Landkreuzer.Types {
 		/// <summary>
 		/// Decrease health
 		/// </summary>
-		/// <param name="value">Pure damage points before applying modificators</param>
+		/// <param name="value">Pure damage points before applying modifications</param>
 		/// <returns>Health after hurting</returns>
 		float Hurt(float value);
 		
 		/// <summary>
 		/// Increase health 
 		/// </summary>
-		/// <param name="value">Pure heal points before applying modificators</param>
+		/// <param name="value">Pure heal points before applying modifications</param>
 		/// <returns>Health after healing</returns>
 		float Heal(float value);
 		
 		UnityEvent OnDead { get; }
 	}
 
-	public interface IProjectile<T> {
+	public interface IProjectile<in T> {
 		void Fire();
 		void SetParameters(T parameters);
 		

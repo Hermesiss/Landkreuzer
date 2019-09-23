@@ -74,19 +74,19 @@ namespace Landkreuzer {
 		public static void StatisticsEvent(StatisticType t, object value) {
 			_stats[t].AddValue(value);
 		}
-		
+
 		private static Dictionary<StatisticType, IStatisticEntry<object>> _stats;
 		private static Stopwatch _stopwatch = new Stopwatch();
 
 		static Statistics() {
 			Overseer.OnGameStart.AddListener(ResetStatistics);
 			Overseer.OnShot.AddListener(() => { StatisticsEvent(StatisticType.Shot, 1); });
-			Overseer.OnEnemyHit.AddListener(() => {StatisticsEvent(StatisticType.Hit, 1);});
-			Overseer.OnEnemyHurt.AddListener(damage => {StatisticsEvent(StatisticType.Damage, damage);});
-			Overseer.OnEnemyKilled.AddListener(enemy => {StatisticsEvent(StatisticType.Death, 1);});
-			Overseer.OnEnemySpawn.AddListener(enemy => {StatisticsEvent(StatisticType.Spawn, 1);});
+			Overseer.OnEnemyHit.AddListener(() => { StatisticsEvent(StatisticType.Hit, 1); });
+			Overseer.OnEnemyHurt.AddListener(damage => { StatisticsEvent(StatisticType.Damage, damage); });
+			Overseer.OnEnemyKilled.AddListener(enemy => { StatisticsEvent(StatisticType.Death, 1); });
+			Overseer.OnEnemySpawn.AddListener(enemy => { StatisticsEvent(StatisticType.Spawn, 1); });
 			Overseer.OnGameOver.AddListener(() => {
-				StatisticsEvent(StatisticType.Time, _stopwatch.ElapsedMilliseconds/1000f);
+				StatisticsEvent(StatisticType.Time, _stopwatch.ElapsedMilliseconds / 1000f);
 				_stopwatch.Stop();
 			});
 		}

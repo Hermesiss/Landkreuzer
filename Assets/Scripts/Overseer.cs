@@ -4,6 +4,9 @@ using Trismegistus.Core.Types;
 using UnityEngine.Events;
 
 namespace Landkreuzer {
+	/// <summary>
+	/// Been there. Seen that. Got the scars.
+	/// </summary>
 	public static class Overseer {
 		public static UnityEvent OnGameOver { get; } = new UnityEvent();
 		public static UnityEvent OnGameStart { get; } = new UnityEvent();

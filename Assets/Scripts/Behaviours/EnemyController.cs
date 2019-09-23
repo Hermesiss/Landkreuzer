@@ -8,7 +8,6 @@ using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
-	
 	public interface IEnemy {
 		UnityFloatEvent OnDamageReceived { get; }
 		UnityEvent OnHit { get; }
@@ -29,13 +28,15 @@ namespace Landkreuzer.Behaviours {
 
 		public override void SetParameters(BeingParameters parameters) {
 			base.SetParameters(parameters);
+
+			// We are using NavMeshAgent only as a pathfinder
 			_navMeshAgent.speed = 0;
 			_navMeshAgent.angularSpeed = parameters.rotationSpeed;
 		}
 
 		private protected override void Awake() {
 			base.Awake();
-			
+
 			_navMeshAgent = GetComponent<NavMeshAgent>();
 			Overseer.RegisterEnemy(this);
 			Overseer.OnPlayerMove.AddListener(pos => { _playerPosition = pos; });
@@ -60,7 +61,7 @@ namespace Landkreuzer.Behaviours {
 
 		private void OnTriggerStay(Collider other) {
 			if (other.tag.Equals("Player")) {
-				//Debug.Log();
+				//Hurting player every second
 				if (!_stopwatch.IsRunning || (_stopwatch.ElapsedMilliseconds > 1000)) {
 					var player = other.GetComponent<PanzerController>();
 					if (player) {
@@ -76,11 +77,16 @@ namespace Landkreuzer.Behaviours {
 		private void Update() {
 			_navMeshAgent.SetDestination(_playerPosition);
 			var t = transform;
+
+			//Exponentiation of one member is cheaper than root extraction from another  
 			if (Mathf.Pow(_navMeshAgent.stoppingDistance, 2) < (_navMeshAgent.destination - t.position).sqrMagnitude) {
+				//Rotating towards nearest path node
 				t.Rotate(Vector3.up,
 					Vector3.SignedAngle(t.forward, _navMeshAgent.steeringTarget - t.position,
 						Vector3.up) *
 					executor.BeingParameters.rotationSpeed * Time.deltaTime / 6);
+
+				//And then moving forward, looks better than standard NavMeshAgent movement handling
 				t.Translate(
 					Time.deltaTime * executor.BeingParameters.speed * t.forward, Space.World);
 			}

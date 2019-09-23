@@ -10,11 +10,10 @@ namespace Landkreuzer.Behaviours {
 	public interface IPlayer {
 		UnityEvent OnPlayerBorn { get; }
 		UnityEvent OnPlayerDied { get; }
-		
 		UnityVec3Event OnPlayerMove { get; }
 	}
+
 	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions, IPlayer {
-		
 		public UnityEvent OnPlayerBorn { get; } = new UnityEvent();
 		public UnityEvent OnPlayerDied { get; } = new UnityEvent();
 		public UnityVec3Event OnPlayerMove { get; } = new UnityVec3Event();
@@ -22,19 +21,24 @@ namespace Landkreuzer.Behaviours {
 		[SerializeField] private Transform weaponPlace;
 		[SerializeField] private WeaponParameters[] weapons;
 
+		/// <summary>
+		/// Custom input made with <see cref="InputSystem"/>
+		/// </summary>
 		private Input _input;
+
 		private Vector2 _currentMovement;
 		private BeingParameters BeingParams => executor.BeingParameters;
 		private Rigidbody _rigidbody;
 		private int _selectedWeapon = 0;
 		private WeaponController[] _instancedWeapons;
 		private bool _controlsEnabled;
-		private Stopwatch _gameStopwatch = new Stopwatch();
+		private readonly Stopwatch _gameStopwatch = new Stopwatch();
 
 		#region MonoBehaviourCallbacks
 
 		private new void Awake() {
 			base.Awake();
+
 			_input = new Input();
 			_input.Panzer.SetCallbacks(this);
 			_rigidbody = GetComponent<Rigidbody>();
@@ -44,7 +48,6 @@ namespace Landkreuzer.Behaviours {
 			SelectWeapon(0);
 			_gameStopwatch.Start();
 			Overseer.RegisterPlayer(this);
-			
 		}
 
 		private void Start() {
@@ -112,6 +115,9 @@ namespace Landkreuzer.Behaviours {
 			}
 		}
 
+		/// <summary>
+		/// Instantiates all weapons from <see cref="weapons"/> under the map
+		/// </summary>
 		private void InstantiateWeapons() {
 			if (_instancedWeapons != null) {
 				foreach (var instancedWeapon in _instancedWeapons) {
@@ -125,9 +131,15 @@ namespace Landkreuzer.Behaviours {
 			}
 		}
 
+		/// <summary>
+		/// Return current weapon to pool under the map, move desired weapon to <see cref="weaponPlace"/>
+		/// </summary>
+		/// <param name="index">Can be slightly outside <see cref="weapons"/> size</param>
 		private void SelectWeapon(int index) {
 			var count = _instancedWeapons.Length;
-			index = (index + count) % count; //So we can call this method with small offset 
+
+			//So we can call this method with small offset
+			index = (index + count) % count;
 			var prev = _instancedWeapons[_selectedWeapon];
 			prev.transform.parent = null;
 			prev.transform.position = Vector3.down * 100;
@@ -137,27 +149,38 @@ namespace Landkreuzer.Behaviours {
 			_selectedWeapon = index;
 		}
 
+		/// <summary>
+		/// Moves forward
+		/// </summary>
+		/// <param name="amount"></param>
 		private void Move(float amount) {
 			_rigidbody.velocity = BeingParams.speed * amount * Time.deltaTime * 60 * transform.forward;
 			OnPlayerMove.Invoke(transform.position);
 		}
 
-
+		/// <summary>
+		/// Rotates around Y axis
+		/// </summary>
+		/// <param name="signedAngle">Normalized value from -1f to 1f</param>
 		private void Rotate(float signedAngle) => _rigidbody.angularVelocity =
 			BeingParams.rotationSpeed * signedAngle * Time.deltaTime * 60 * Vector3.up;
 
 		private void Shoot() => _instancedWeapons[_selectedWeapon].Shoot();
 
+		/// <summary>
+		/// Enables or disables all controls
+		/// </summary>
+		/// <param name="mode"></param>
 		private void ControlsState(bool mode) {
 			_controlsEnabled = mode;
 			if (mode) _input.Panzer.Enable();
 			else _input.Panzer.Disable();
 		}
-		
-		
+
+
 		protected override void Death() {
 			ControlsState(false);
-			//Statistics.StatisticsEvent(StatisticType.Time, _gameStopwatch.ElapsedMilliseconds/1000f);
+
 			_gameStopwatch.Stop();
 			OnPlayerDied.Invoke();
 		}

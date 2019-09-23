@@ -5,12 +5,13 @@ using UnityEngine;
 namespace Landkreuzer.Behaviours {
 	public class WeaponController : MonoBehaviour {
 		public WeaponParameters Parameters { get; private set; }
-	
+
 		private readonly Stopwatch _stopwatch = new Stopwatch();
 
 		public static WeaponController Create(WeaponParameters parameters, Vector3 position, Quaternion rotation,
 			Transform parent = null) {
-			var weapon = Instantiate(parameters.towerPrefab, position, rotation, parent).AddComponent<WeaponController>();
+			var weapon = Instantiate(parameters.towerPrefab, position, rotation, parent)
+				.AddComponent<WeaponController>();
 			weapon.Parameters = parameters;
 			return weapon;
 		}

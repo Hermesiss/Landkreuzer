@@ -8,11 +8,13 @@ namespace Landkreuzer.Behaviours {
 	public class ProjectileParameters {
 		public readonly float Damage;
 		public readonly float Speed;
+
 		public ProjectileParameters(float damage, float speed) {
 			Damage = damage;
 			Speed = speed;
 		}
 	}
+
 	public class ProjectileController : MonoBehaviour, IProjectile<ProjectileParameters>, IDamaging {
 		public float Damage => _parameters.Damage;
 
@@ -45,6 +47,11 @@ namespace Landkreuzer.Behaviours {
 
 		public UnityEvent OnFire { get; } = new UnityEvent();
 
+		/// <summary>
+		/// Perpetual forward movement
+		/// </summary>
+		/// <param name="speed">Units per second</param>
+		/// <returns></returns>
 		private IEnumerator Movement(float speed) {
 			while (true) {
 				transform.Translate(speed * Time.deltaTime * Vector3.forward, Space.Self);
