@@ -27,6 +27,8 @@ namespace Landkreuzer.Types {
 	public interface IProjectile<T> {
 		void Fire();
 		void SetParameters(T parameters);
+		
+		UnityEvent OnFire { get; }
 	}
 
 	public interface IDamaging {

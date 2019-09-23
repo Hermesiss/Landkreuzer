@@ -1,11 +1,20 @@
+using System;
 using System.Diagnostics;
 using Landkreuzer.Types;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Landkreuzer.Behaviours {
-	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions {
+	public interface IPlayer {
+		UnityEvent OnPlayerBorn { get; }
+		UnityEvent OnPlayerDied { get; }
+	}
+	public class PanzerController : BeingControllerAbstract, Input.IPanzerActions, IPlayer {
 		public static Vector3 Position { get; private set; }
+		
+		public UnityEvent OnPlayerBorn { get; } = new UnityEvent();
+		public UnityEvent OnPlayerDied { get; } = new UnityEvent();
 
 		[SerializeField] private Transform weaponPlace;
 		[SerializeField] private WeaponParameters[] weapons;
@@ -18,6 +27,8 @@ namespace Landkreuzer.Behaviours {
 		private WeaponController[] _instancedWeapons;
 		private bool _controlsEnabled;
 		private Stopwatch _gameStopwatch = new Stopwatch();
+		
+		
 
 		#region MonoBehaviourCallbacks
 
@@ -31,9 +42,14 @@ namespace Landkreuzer.Behaviours {
 			InstantiateWeapons();
 			SelectWeapon(0);
 			_gameStopwatch.Start();
-			Overseer.GameStart();
+			Overseer.RegisterGameChanger(this);
+			
 		}
-		
+
+		private void Start() {
+			OnPlayerBorn.Invoke();
+		}
+
 		private void Update() {
 			InputSystem.Update();
 			LegacyMovementDetection();
@@ -138,9 +154,9 @@ namespace Landkreuzer.Behaviours {
 		
 		protected override void Death() {
 			ControlsState(false);
-			Statistics.StatisticsEvent(StatisticType.Time, _gameStopwatch.ElapsedMilliseconds/1000f);
+			//Statistics.StatisticsEvent(StatisticType.Time, _gameStopwatch.ElapsedMilliseconds/1000f);
 			_gameStopwatch.Stop();
-			Overseer.GameOver();
+			OnPlayerDied.Invoke();
 		}
 	}
 }

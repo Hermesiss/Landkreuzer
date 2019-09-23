@@ -10,6 +10,7 @@ namespace Landkreuzer.Behaviours.UI {
 		private Canvas _canvas;
 
 		private void Awake() {
+			var stats = Statistics.Stats;
 			_canvas = GetComponent<Canvas>();
 			_canvas.enabled = false;
 			Overseer.OnGameOver.AddListener(DisplayScores);

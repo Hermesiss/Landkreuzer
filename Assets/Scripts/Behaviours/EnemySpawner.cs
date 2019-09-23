@@ -56,7 +56,6 @@ namespace Landkreuzer.Behaviours {
 					var enemy = Spawn(enemiesPool[Random.Range(0, enemiesPool.Length)], spawnPosition,
 						GetSpawnRotation(spawnPosition));
 					_enemies.Add(enemy);
-					Statistics.StatisticsEvent(StatisticType.Spawn, 1);
 					_stopwatch.Restart();
 				}
 

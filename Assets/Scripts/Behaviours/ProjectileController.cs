@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Landkreuzer.Types;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Landkreuzer.Behaviours {
 	public class ProjectileParameters {
@@ -17,6 +18,10 @@ namespace Landkreuzer.Behaviours {
 
 		private ProjectileParameters _parameters;
 
+		public ProjectileController() {
+			Overseer.RegisterProjectile(this);
+		}
+
 		private void Awake() {
 			GetComponent<Collider>().isTrigger = true;
 		}
@@ -30,13 +35,15 @@ namespace Landkreuzer.Behaviours {
 		}
 
 		public void Fire() {
+			OnFire.Invoke();
 			StartCoroutine(Movement(_parameters.Speed));
-			Statistics.StatisticsEvent(StatisticType.Shot, 1);
 		}
 
 		public void SetParameters(ProjectileParameters parameters) {
 			_parameters = parameters;
 		}
+
+		public UnityEvent OnFire { get; } = new UnityEvent();
 
 		private IEnumerator Movement(float speed) {
 			while (true) {

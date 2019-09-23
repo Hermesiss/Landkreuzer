@@ -1,15 +1,30 @@
 using System;
 using System.Diagnostics;
 using Landkreuzer.Types;
+using Trismegistus.Core.Types;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using Debug = UnityEngine.Debug;
 
 namespace Landkreuzer.Behaviours {
+	
+	public interface IEnemy {
+		UnityFloatEvent OnDamageReceived { get; }
+		UnityEvent OnHit { get; }
+		BeingEvent OnSpawn { get; }
+		BeingEvent OnKilled { get; }
+	}
+
 	[RequireComponent(typeof(NavMeshAgent))]
-	public class EnemyController : BeingControllerAbstract {
+	public class EnemyController : BeingControllerAbstract, IEnemy {
 		private NavMeshAgent _navMeshAgent;
 		private Stopwatch _stopwatch = new Stopwatch();
+
+		public UnityFloatEvent OnDamageReceived { get; } = new UnityFloatEvent();
+		public UnityEvent OnHit { get; } = new UnityEvent();
+		public BeingEvent OnSpawn { get; } = new BeingEvent();
+		public BeingEvent OnKilled { get; } = new BeingEvent();
 
 		public override void SetParameters(BeingParameters parameters) {
 			base.SetParameters(parameters);
@@ -20,10 +35,12 @@ namespace Landkreuzer.Behaviours {
 		private protected override void Awake() {
 			base.Awake();
 			_navMeshAgent = GetComponent<NavMeshAgent>();
+			Overseer.RegisterEnemy(this);
+			OnSpawn.Invoke(this);
 		}
 
 		protected override void Death() {
-			Statistics.StatisticsEvent(StatisticType.Death, 1);
+			OnKilled.Invoke(this);
 			Debug.Log("Death");
 			Destroy(gameObject);
 		}
@@ -32,8 +49,8 @@ namespace Landkreuzer.Behaviours {
 			var projectileController = other.GetComponent<ProjectileController>();
 			if (projectileController) {
 				var dmg = projectileController.Damage;
-				Statistics.StatisticsEvent(StatisticType.Damage, dmg);
-				Statistics.StatisticsEvent(StatisticType.Hit, 1);
+				OnHit.Invoke();
+				OnDamageReceived.Invoke(dmg);
 				executor.Hurt((uint) dmg);
 			}
 		}
@@ -41,8 +58,7 @@ namespace Landkreuzer.Behaviours {
 		private void OnTriggerStay(Collider other) {
 			if (other.tag.Equals("Player")) {
 				//Debug.Log();
-				if (!_stopwatch.IsRunning || (_stopwatch.ElapsedMilliseconds > 1000))
-				{
+				if (!_stopwatch.IsRunning || (_stopwatch.ElapsedMilliseconds > 1000)) {
 					var player = other.GetComponent<PanzerController>();
 					if (player) {
 						Debug.Log($"Is running {_stopwatch.IsRunning}, elapsed {_stopwatch.ElapsedMilliseconds}");

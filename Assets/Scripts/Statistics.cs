@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Landkreuzer {
 	public enum StatisticType {
@@ -68,20 +69,39 @@ namespace Landkreuzer {
 	}
 
 	public static class Statistics {
-		private static readonly Dictionary<StatisticType, IStatisticEntry<object>> _stats =
-			new Dictionary<StatisticType, IStatisticEntry<object>> {
-				{StatisticType.Damage, new FloatEntry("Damage dealt")},
-				{StatisticType.Time, new FloatEntry("Time survived")},
-				{StatisticType.Shot, new IntEntry("Shots made")},
-				{StatisticType.Hit, new IntEntry("Bullets hit")},
-				{StatisticType.Spawn, new IntEntry("Enemies spawned")},
-				{StatisticType.Death, new IntEntry("Enemies died")}
-			};
-
 		public static IReadOnlyDictionary<StatisticType, IStatisticEntry<object>> Stats => _stats;
 
 		public static void StatisticsEvent(StatisticType t, object value) {
 			_stats[t].AddValue(value);
+		}
+		
+		private static Dictionary<StatisticType, IStatisticEntry<object>> _stats;
+		private static Stopwatch _stopwatch = new Stopwatch();
+
+		static Statistics() {
+			Overseer.OnGameStart.AddListener(ResetStatistics);
+			Overseer.OnShot.AddListener(() => { StatisticsEvent(StatisticType.Shot, 1); });
+			Overseer.OnEnemyHit.AddListener(() => {StatisticsEvent(StatisticType.Hit, 1);});
+			Overseer.OnEnemyHurt.AddListener(damage => {StatisticsEvent(StatisticType.Damage, damage);});
+			Overseer.OnEnemyKilled.AddListener(enemy => {StatisticsEvent(StatisticType.Death, 1);});
+			Overseer.OnEnemySpawn.AddListener(enemy => {StatisticsEvent(StatisticType.Spawn, 1);});
+			Overseer.OnGameOver.AddListener(() => {
+				StatisticsEvent(StatisticType.Time, _stopwatch.ElapsedMilliseconds/1000f);
+				_stopwatch.Stop();
+			});
+		}
+
+		private static void ResetStatistics() {
+			_stats =
+				new Dictionary<StatisticType, IStatisticEntry<object>> {
+					{StatisticType.Damage, new FloatEntry("Damage dealt")},
+					{StatisticType.Time, new FloatEntry("Time survived")},
+					{StatisticType.Shot, new IntEntry("Shots made")},
+					{StatisticType.Hit, new IntEntry("Bullets hit")},
+					{StatisticType.Spawn, new IntEntry("Enemies spawned")},
+					{StatisticType.Death, new IntEntry("Enemies died")}
+				};
+			_stopwatch.Start();
 		}
 	}
 }
